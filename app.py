@@ -10,17 +10,17 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Load the Diabetes Prediction Model and Scaler
-with open('C:/Users/shett/Desktop/Se Project/Diabetes_Prediction_Model_Test.pkl', 'rb') as diabetes_model_file:
+with open('Diabetes_Prediction_Model_Test.pkl', 'rb') as diabetes_model_file:
     diabetes_model = pickle.load(diabetes_model_file)
 
 # Load the dataset for diabetes model and fit the scaler
-diabetes_data = pd.read_csv('C:/Users/shett/Desktop/Se Project/preprocessed_diabetes_data.csv')
+diabetes_data = pd.read_csv('preprocessed_diabetes_data.csv')
 diabetes_scaler = StandardScaler()
 numerical_features = ['age', 'bmi', 'HbA1c_level', 'blood_glucose_level']
 diabetes_scaler.fit(diabetes_data[numerical_features])
 
 # Load the Lung Cancer Prediction Model
-lung_cancer_model_file_path = r'C:\Users\shett\Desktop\Se Project\lung_cancer_rf_model.pkl'
+lung_cancer_model_file_path = 'lung_cancer_rf_model.pkl'
 with open(lung_cancer_model_file_path, 'rb') as lung_cancer_model_file:
     lung_cancer_model = pickle.load(lung_cancer_model_file)
 
