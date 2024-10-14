@@ -4,28 +4,32 @@ import pickle
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-import os
+import os  # Import os for handling the environment variable for port
+
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Load the Diabetes Prediction Model and Scaler
-with open('Diabetes_Prediction_Model_Test.pkl', 'rb') as diabetes_model_file:
-with open('Diabetes_Prediction_Model_Test.pkl', 'rb') as diabetes_model_file:
-    diabetes_model = pickle.load(diabetes_model_file)
+try:
+    with open('Diabetes_Prediction_Model_Test.pkl', 'rb') as diabetes_model_file:
+        diabetes_model = pickle.load(diabetes_model_file)
 
-# Load the dataset for diabetes model and fit the scaler
-diabetes_data = pd.read_csv('preprocessed_diabetes_data.csv')
-diabetes_data = pd.read_csv('preprocessed_diabetes_data.csv')
-diabetes_scaler = StandardScaler()
-numerical_features = ['age', 'bmi', 'HbA1c_level', 'blood_glucose_level']
-diabetes_scaler.fit(diabetes_data[numerical_features])
+    # Load the dataset for diabetes model and fit the scaler
+    diabetes_data = pd.read_csv('preprocessed_diabetes_data.csv')
+    diabetes_scaler = StandardScaler()
+    numerical_features = ['age', 'bmi', 'HbA1c_level', 'blood_glucose_level']
+    diabetes_scaler.fit(diabetes_data[numerical_features])
+except Exception as e:
+    print(f"Error loading the diabetes model or scaler: {e}")
 
 # Load the Lung Cancer Prediction Model
-lung_cancer_model_file_path = 'lung_cancer_rf_model.pkl'
-lung_cancer_model_file_path = 'lung_cancer_rf_model.pkl'
-with open(lung_cancer_model_file_path, 'rb') as lung_cancer_model_file:
-    lung_cancer_model = pickle.load(lung_cancer_model_file)
+try:
+    lung_cancer_model_file_path = 'lung_cancer_rf_model.pkl'
+    with open(lung_cancer_model_file_path, 'rb') as lung_cancer_model_file:
+        lung_cancer_model = pickle.load(lung_cancer_model_file)
+except Exception as e:
+    print(f"Error loading the lung cancer model: {e}")
 
 # Home route
 @app.route('/')
@@ -108,6 +112,7 @@ def predict_lung_cancer():
         # Return an error message if something goes wrong
         return jsonify({'error': str(e)})
 
+# Start the Flask application with the correct host and port for deployment
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Use the port provided by Render
+    port = int(os.environ.get("PORT", 5000))  # Use the port provided by Render or default to 5000
     app.run(debug=True, host="0.0.0.0", port=port)
